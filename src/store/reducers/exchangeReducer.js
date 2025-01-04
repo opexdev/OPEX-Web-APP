@@ -29,7 +29,8 @@ const initialState = {
     baseCurrency: "",
     dateType: "",
     currencies: [],
-    pairsList: []
+    pairsList: [],
+    fees: [],
 };
 
 const exchangeReducer = (state = initialState, action) => {
@@ -117,6 +118,11 @@ const exchangeReducer = (state = initialState, action) => {
             return {
                 ...state,
                 pairsList: action.pairs,
+            };
+        case actionTypes.GET_FEES:
+            return {
+                ...state,
+                fees: action.fees,
             };
 
         default:

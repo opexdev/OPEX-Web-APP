@@ -58,3 +58,4 @@ export const GET_USER_CONFIGS_INITIATE = "GET_USER_CONFIGS_INITIATE"
 
 export const GET_CURRENCIES = "GET_CURRENCIES";
 export const GET_PAIRS = "GET_PAIRS";
+export const GET_FEES = "GET_FEES";

@@ -53,10 +53,9 @@ function* getExchangeInfo() {
 
     for (let i = 0; i < 10; i++) {
         try {
-            const {data: {symbols}} = yield call(axios.get, '/api/v3/exchangeInfo')
+            const {data} = yield call(axios.get, '/api/v3/exchangeInfo')
 
-            console.log("symbols", symbols)
-            return symbols
+            return data
         } catch (err) {
             if (i < 2) {
                 yield delay(1000)
@@ -117,6 +116,8 @@ export function* loadConfig(action) {
 
     try {
 
+        const exchangeInfo = yield call(getExchangeInfo);
+
         const currencies = yield call(fetchCurrencies);
         const currenciesMap = currencies.reduce((acc, currency) => {
             acc[currency.symbol] = currency;
@@ -124,10 +125,11 @@ export function* loadConfig(action) {
         }, {});
         yield put(actions.getCurrencies(currenciesMap));
 
-        const pairsList = yield call(getExchangeInfo);
+        const pairsList = exchangeInfo.symbols;
         const pairsListMap = pairsList.reduce((acc, pair) => {
             /*acc[pair.symbol] = pair;*/
-            acc[pair.symbol] = {
+            const key = `${pair.baseAsset}_${pair.quoteAsset}`;
+            acc[key] = {
                 symbol: pair.symbol,
                 baseAsset: pair.baseAsset,
                 quoteAsset: pair.quoteAsset,
@@ -137,6 +139,19 @@ export function* loadConfig(action) {
         }, {});
         yield put(actions.getPairs(pairsListMap));
 
+        const fees = exchangeInfo.fees;
+        const feesMap = fees.reduce((acc, fee) => {
+            acc[fee.pair] = fee;
+           /* acc[pair.symbol] = {
+                symbol: pair.symbol,
+                baseAsset: pair.baseAsset,
+                quoteAsset: pair.quoteAsset,
+                orderTypes: pair.orderTypes,
+            };*/
+            return acc;
+        }, {});
+        yield put(actions.getFees(feesMap));
+
 
 
         console.log("pairsListMap", pairsListMap)
@@ -145,7 +160,7 @@ export function* loadConfig(action) {
         const localTheme = yield call([localStorage, 'getItem'], 'theme')
         if (localTheme) appTheme = localTheme;
 
-        const symbols = yield call(getExchangeInfo)
+        const symbols = exchangeInfo.symbols
         for (const symbol of symbols) {
             if (symbol.symbol.toUpperCase().includes("NLN")) continue
             if (!assets.includes(symbol.baseAsset)) {

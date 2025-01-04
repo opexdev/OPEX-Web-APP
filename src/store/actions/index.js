@@ -24,8 +24,8 @@ export {
     setVerifyEmailLockInitiate,
     setExchangeConfigs,
     getCurrencies,
-    getPairs
-
+    getPairs,
+    getFees
 } from "./exchange";
 
 export {

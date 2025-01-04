@@ -1,4 +1,5 @@
 import * as actionTypes from "./actionTypes";
+import {GET_FEES} from "./actionTypes";
 
 export const setActivePairInitiate = (pair, activeTab) => {
     return {
@@ -109,5 +110,11 @@ export const getPairs = pairs => {
     return {
         type: actionTypes.GET_PAIRS,
         pairs,
+    };
+};
+export const getFees = fees => {
+    return {
+        type: actionTypes.GET_FEES,
+        fees,
     };
 };
