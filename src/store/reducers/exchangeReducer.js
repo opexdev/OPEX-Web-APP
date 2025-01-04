@@ -27,7 +27,8 @@ const initialState = {
     defaultTheme: "",
     supportEmail: "",
     baseCurrency: "",
-    dateType: ""
+    dateType: "",
+    currencies: []
 };
 
 const exchangeReducer = (state = initialState, action) => {
@@ -105,6 +106,13 @@ const exchangeReducer = (state = initialState, action) => {
                 ...state,
                 ...action.configs
             };
+
+        case actionTypes.GET_CURRENCIES:
+            return {
+                ...state,
+                currencies: action.currencies,
+            };
+
         default:
             return state;
     }

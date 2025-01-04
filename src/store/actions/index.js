@@ -22,7 +22,8 @@ export {
     setIPGInitiate,
     setVerifyEmailLock,
     setVerifyEmailLockInitiate,
-    setExchangeConfigs
+    setExchangeConfigs,
+    getCurrencies
 
 } from "./exchange";
 

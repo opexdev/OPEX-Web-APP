@@ -98,3 +98,10 @@ export const setExchangeConfigs = configs => {
         configs: configs
     };
 };
+
+export const getCurrencies = currencies => {
+    return {
+        type: actionTypes.GET_CURRENCIES,
+        currencies,
+    };
+};

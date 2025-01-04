@@ -65,6 +65,21 @@ function* getExchangeInfo() {
         throw new Error('getExchangeInfo failed!')
     }
 }
+function* fetchCurrencies() {
+    for (let i = 0; i < 10; i++) {
+        try {
+            const response = yield call(axios.get, '/wallet/currency');
+            const { currencies } = response.data;
+            return currencies;
+        } catch (err) {
+            if (i < 9) {
+                yield delay(1000);
+            } else {
+                throw new Error('Failed to fetch currencies after 10 attempts.');
+            }
+        }
+    }
+}
 
 export function* loadConfig(action) {
 
@@ -100,6 +115,13 @@ export function* loadConfig(action) {
 
     try {
 
+        const currencies = yield call(fetchCurrencies);
+        const currenciesMap = currencies.reduce((acc, currency) => {
+            acc[currency.symbol] = currency;
+            return acc;
+        }, {});
+        yield put(actions.getCurrencies(currenciesMap));
+
         const localTheme = yield call([localStorage, 'getItem'], 'theme')
         if (localTheme) appTheme = localTheme;
 
@@ -125,6 +147,7 @@ export function* loadConfig(action) {
             lastPrice[symbol.symbol] = 0
         }
         yield put(actions.setExchange({pairs, assets, symbols, lastPrice}));
+        /*yield put(actions.getCurrencies({currencies}));*/
         yield put(actions.setUserAccountInfo({wallets, tradeFee}));
 
         const activePair = yield call([localStorage, 'getItem'], 'activePair')

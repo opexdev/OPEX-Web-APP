@@ -23,6 +23,7 @@ import Guide from "./Pages/Info/Guide/Guide";
 import Rules from "./Pages/Info/Rules/Rules";
 import ContactUs from "./Pages/Info/ContactUs/ContactUs";
 import EasyTrading from "./Pages/EasyTrading/EasyTrading";
+import axios from "axios";
 
 const Browser = () => {
     const query = useQuery();
@@ -33,6 +34,10 @@ const Browser = () => {
     const hasError = useSelector((state) => state.global.hasError)
     const title = useSelector((state) => state.exchange.title)
     const description = useSelector((state) => state.exchange.description)
+
+    const currencies = useSelector((state) => state.exchange.currencies)
+
+    console.log("currencies from redux", currencies)
 
 
     theme === "DARK" ? document.body.classList.add('dark') : document.body.classList.remove('dark');
@@ -58,6 +63,13 @@ const Browser = () => {
         document.title = title ? title : " ";
         meta.description.content = description ? description : " "
     }, [title, description])
+
+
+    /*const getCurrencies = (currency = "") => {
+        return axios.get(`/wallet/currency/${currency}`)
+    }
+
+    console.log("getCurrencies", getCurrencies())*/
 
     if (isLoading) return <FullWidthLoading/>
 
