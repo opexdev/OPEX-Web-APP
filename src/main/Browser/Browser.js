@@ -36,8 +36,9 @@ const Browser = () => {
     const description = useSelector((state) => state.exchange.description)
 
     const currencies = useSelector((state) => state.exchange.currencies)
+    const pairsList = useSelector((state) => state.exchange.pairsList)
 
-    console.log("currencies from redux", currencies)
+    console.log("pairsList from redux", pairsList)
 
 
     theme === "DARK" ? document.body.classList.add('dark') : document.body.classList.remove('dark');
@@ -63,13 +64,6 @@ const Browser = () => {
         document.title = title ? title : " ";
         meta.description.content = description ? description : " "
     }, [title, description])
-
-
-    /*const getCurrencies = (currency = "") => {
-        return axios.get(`/wallet/currency/${currency}`)
-    }
-
-    console.log("getCurrencies", getCurrencies())*/
 
     if (isLoading) return <FullWidthLoading/>
 

@@ -28,7 +28,8 @@ const initialState = {
     supportEmail: "",
     baseCurrency: "",
     dateType: "",
-    currencies: []
+    currencies: [],
+    pairsList: []
 };
 
 const exchangeReducer = (state = initialState, action) => {
@@ -111,6 +112,11 @@ const exchangeReducer = (state = initialState, action) => {
             return {
                 ...state,
                 currencies: action.currencies,
+            };
+        case actionTypes.GET_PAIRS:
+            return {
+                ...state,
+                pairsList: action.pairs,
             };
 
         default:

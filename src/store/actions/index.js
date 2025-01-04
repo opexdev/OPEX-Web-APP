@@ -23,7 +23,8 @@ export {
     setVerifyEmailLock,
     setVerifyEmailLockInitiate,
     setExchangeConfigs,
-    getCurrencies
+    getCurrencies,
+    getPairs
 
 } from "./exchange";
 

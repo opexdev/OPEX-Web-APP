@@ -54,6 +54,8 @@ function* getExchangeInfo() {
     for (let i = 0; i < 10; i++) {
         try {
             const {data: {symbols}} = yield call(axios.get, '/api/v3/exchangeInfo')
+
+            console.log("symbols", symbols)
             return symbols
         } catch (err) {
             if (i < 2) {
@@ -121,6 +123,24 @@ export function* loadConfig(action) {
             return acc;
         }, {});
         yield put(actions.getCurrencies(currenciesMap));
+
+        const pairsList = yield call(getExchangeInfo);
+        const pairsListMap = pairsList.reduce((acc, pair) => {
+            /*acc[pair.symbol] = pair;*/
+            acc[pair.symbol] = {
+                symbol: pair.symbol,
+                baseAsset: pair.baseAsset,
+                quoteAsset: pair.quoteAsset,
+                orderTypes: pair.orderTypes,
+            };
+            return acc;
+        }, {});
+        yield put(actions.getPairs(pairsListMap));
+
+
+
+        console.log("pairsListMap", pairsListMap)
+
 
         const localTheme = yield call([localStorage, 'getItem'], 'theme')
         if (localTheme) appTheme = localTheme;

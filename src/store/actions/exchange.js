@@ -105,3 +105,9 @@ export const getCurrencies = currencies => {
         currencies,
     };
 };
+export const getPairs = pairs => {
+    return {
+        type: actionTypes.GET_PAIRS,
+        pairs,
+    };
+};
