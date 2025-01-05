@@ -73,3 +73,19 @@ export const timeValidator = str => {
 }
 
 export const toAbsoluteUrl = (path) => process.env.PUBLIC_URL + path
+
+
+export function getCurrencyNameOrAlias(currency, lang) {
+
+    const languagesConfig = { fa: "alias", en: "name", ar: "alias" };
+    const langOption = languagesConfig[lang] || 'name';
+
+    if (!currency || typeof currency !== 'object') {
+        return '-';
+    }
+
+    const name = currency.name || '-';
+    const alias = currency.alias || '-';
+
+    return langOption === 'alias' ? alias : name;
+}

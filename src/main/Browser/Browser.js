@@ -39,6 +39,7 @@ const Browser = () => {
     const pairsList = useSelector((state) => state.exchange.pairsList)
     const fees = useSelector((state) => state.exchange.fees)
 
+    console.log("currencies from redux", currencies)
     console.log("fees from redux", fees)
     console.log("pairsList from redux", pairsList)
 
