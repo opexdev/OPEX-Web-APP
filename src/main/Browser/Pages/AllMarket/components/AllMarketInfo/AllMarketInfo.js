@@ -9,6 +9,8 @@ import Loading from "../../../../../../components/Loading/Loading";
 import Error from "../../../../../../components/Error/Error";
 import {setMarketInterval} from "../../../../../../store/actions";
 import {useTranslation} from "react-i18next";
+import i18n from "i18next";
+import {getCurrencyNameOrAlias} from "../../../../../../utils/utils";
 
 const AllMarketInfo = () => {
 
@@ -21,8 +23,11 @@ const AllMarketInfo = () => {
     const interval = useSelector((state) => state.global.marketInterval)
     const quote = activeCurrency === "" ? null : activeCurrency
 
+    const language = i18n.language
+    const currencies = useSelector((state) => state.exchange.currencies)
+
     const {data: overview, isLoading, error} = useOverview(null, interval, quote)
-    const {data: currencies} = useGetQuoteCurrencies()
+    const {data: quoteCurrencies} = useGetQuoteCurrencies()
 
 
     const content = () => {
@@ -44,8 +49,8 @@ const AllMarketInfo = () => {
                     <Icon iconName={`${card ? 'icon-row' : 'icon-grid'} fs-02 flex cursor-pointer hover-text`} customClass={`ml-05`} onClick={()=>setCard(prevState => !prevState)}/>
                     <h1 className={`mr-05 ml-025 cursor-pointer hover-text`}  onClick={()=>setActiveCurrency("")}>{t("market.title")}</h1>
                     <div className={`row jc-center ai-center fs-0-8 mr-1`}>
-                        {currencies?.map((currency) =>
-                            <span className={`px-2 py-1 rounded-5 cursor-pointer hover-text ${classes.title} ${activeCurrency === currency && classes.active}`} onClick={() => setActiveCurrency(currency)} key={currency}>{t("currency." + currency)}</span>
+                        {quoteCurrencies?.map((currency) =>
+                            <span className={`px-2 py-1 rounded-5 cursor-pointer hover-text ${classes.title} ${activeCurrency === currency && classes.active}`} onClick={() => setActiveCurrency(currency)} key={currency}>{getCurrencyNameOrAlias(currencies[currency], language)}</span>
                         )}
                     </div>
                 </div>

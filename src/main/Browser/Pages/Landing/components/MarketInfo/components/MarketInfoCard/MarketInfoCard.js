@@ -2,17 +2,20 @@ import React from 'react';
 import classes from './MarketInfoCard.module.css'
 import {images} from "../../../../../../../../assets/images";
 import {useTranslation} from "react-i18next";
-import {BN} from "../../../../../../../../utils/utils";
+import {BN, getCurrencyNameOrAlias} from "../../../../../../../../utils/utils";
 import {setActivePairInitiate} from "../../../../../../../../store/actions";
 import {Panel} from "../../../../../../Routes/routes";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
+import i18n from "i18next";
 
 const MarketInfoCard = ({data, activeCurrency}) => {
 
     const {t} = useTranslation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const language = i18n.language
+    const currencies = useSelector((state) => state.exchange.currencies)
     const allExchangeSymbols = useSelector((state) => state.exchange.symbols)
 
     const backgroundBar = (percent) => {
@@ -38,19 +41,23 @@ const MarketInfoCard = ({data, activeCurrency}) => {
                 return (
                     <div className={`${classes.item} card-border card-bg column jc-between ai-center py-3 cursor-pointer`} style={backgroundBar(tr.priceChangePercent.toString())} key={index} onClick={() => navigateToPanel(tr.symbol)}>
                         <div className={`row jc-center ai-center width-100`}>
-                            <img src={images[tr?.base]} alt={tr?.base}
+                            <img src={currencies[tr?.base]?.icon} alt={tr?.base}
                                  title={tr?.base} className={`img-lg ml-05`}/>
                             <div className={`column mr-05`}>
-                                <span className={`fs-01`}>{activeCurrency ? t("currency." + tr?.base) : tr?.base + " / " + tr?.quote}</span>
-                                <span
-                                    className={`${tr.priceChangePercent > 0 ? "text-green" : "text-red"} direction-ltr`}>{new BN(tr.priceChangePercent).toFormat(2)} %</span>
+                                <span className={`fs-01`}>{activeCurrency ?
+                                    <>
+                                        {getCurrencyNameOrAlias(currencies[tr?.base], language)}
+                                        <span className={`text-gray fs-0-8 mr-05`}>{tr?.base}</span>
+                                    </>
+                                    : tr?.base + " / " + tr?.quote}</span>
+                                <span className={`flex ${i18n.language !== "fa" ? 'jc-end' : 'jc-start'} ai-center ${tr.priceChangePercent > 0 ? "text-green" : tr.priceChangePercent < 0 ? "text-red" : ""} direction-ltr`}>{tr.priceChangePercent === 0 ? "0 %" : `${new BN(tr.priceChangePercent).toFormat(2)} %`}</span>
+
                             </div>
                         </div>
-                        <span
-                            className={`${tr.priceChangePercent > 0 ? "text-green" : "text-red"} fs-02`}>{new BN(tr.lastPrice).toFormat()} <span className={`fs-0-7 mr-05`}>{t("currency." + tr?.quote)}</span></span>
+                        <span className={`${tr.priceChangePercent > 0 ? "text-green" : "text-red"} fs-02`}>{new BN(tr.lastPrice).decimalPlaces(currencies[tr?.quote]?.precision ?? 0).toFormat()} <span className={`fs-0-7 mr-05`}>{tr?.quote}</span></span>
                         <div className={`row jc-center ai-center width-100`}>
                             <span className={`text-gray ml-05`}>{t("MarketInfo.volume")}:</span>
-                            <span className={`mr-05`}>{new BN(tr.volume).toFormat()}</span>
+                            <span className={`mr-05`}>{new BN(tr.volume).decimalPlaces(currencies[tr?.base]?.precision ?? 0).toFormat()} <span className={`text-gray fs-0-8 mr-05`}>{tr?.base}</span></span>
                         </div>
                         <div className={`column jc-center ai-center position-relative`}>
                             <img

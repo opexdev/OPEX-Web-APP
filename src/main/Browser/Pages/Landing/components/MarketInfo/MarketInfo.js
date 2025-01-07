@@ -11,6 +11,7 @@ import Error from "../../../../../../components/Error/Error";
 import {useTranslation} from "react-i18next";
 import i18n from "i18next";
 import {useSelector} from "react-redux";
+import {getCurrencyNameOrAlias} from "../../../../../../utils/utils";
 
 const MarketInfo = () => {
 
@@ -23,11 +24,13 @@ const MarketInfo = () => {
     const quote = activeCurrency === "" ? null : activeCurrency
 
     const currencies = useSelector((state) => state.exchange.currencies)
+    const language = i18n.language
 
     const {data: overview, isLoading, error} = useOverview(null, interval, quote)
     const {data: quoteCurrencies} = useGetQuoteCurrencies()
 
     console.log("overview", overview)
+    console.log("i18n.language", i18n.language)
 
 
     const content = () => {
@@ -57,7 +60,7 @@ const MarketInfo = () => {
                     <div className={`row jc-center ai-center mr-1 fs-0-8`}>
                         {quoteCurrencies?.map((currency) =>
                             <span className={`px-2 py-1 rounded-5 cursor-pointer hover-text ${classes.title} ${activeCurrency === currency && classes.active}`} onClick={() => setActiveCurrency(currency)} key={currency}>
-                                {currencies[currency]?.name}
+                                {getCurrencyNameOrAlias(currencies[currency], language)}
                                 {/*{t("currency." + currency)}*/}
                             </span>
                         )}

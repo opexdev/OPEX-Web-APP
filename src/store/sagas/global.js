@@ -119,10 +119,30 @@ export function* loadConfig(action) {
         const exchangeInfo = yield call(getExchangeInfo);
 
         const currencies = yield call(fetchCurrencies);
-        const currenciesMap = currencies.reduce((acc, currency) => {
+
+        console.log("currencies", currencies)
+
+        /*const currenciesMap = currencies.reduce((acc, currency) => {
             acc[currency.symbol] = currency;
             return acc;
+        }, {});*/
+
+        const currenciesMap = currencies.reduce((acc, currency) => {
+            const precisionValue = currency.precision.toString();
+            const decimalPlaces = precisionValue.includes('.')
+                ? precisionValue.split('.')[1].length
+                : 0;
+            acc[currency.symbol] = {
+                ...currency,
+                precision: decimalPlaces,
+            };
+            return acc;
         }, {});
+
+        console.log("currenciesMap", currenciesMap)
+
+
+
         yield put(actions.getCurrencies(currenciesMap));
 
         const pairsList = exchangeInfo.symbols;
