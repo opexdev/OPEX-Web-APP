@@ -120,7 +120,6 @@ export function* loadConfig(action) {
 
         const currencies = yield call(fetchCurrencies);
 
-        console.log("currencies", currencies)
 
         /*const currenciesMap = currencies.reduce((acc, currency) => {
             acc[currency.symbol] = currency;
@@ -138,10 +137,6 @@ export function* loadConfig(action) {
             };
             return acc;
         }, {});
-
-        console.log("currenciesMap", currenciesMap)
-
-
 
         yield put(actions.getCurrencies(currenciesMap));
 
@@ -171,11 +166,6 @@ export function* loadConfig(action) {
             return acc;
         }, {});
         yield put(actions.getFees(feesMap));
-
-
-
-        console.log("pairsListMap", pairsListMap)
-
 
         const localTheme = yield call([localStorage, 'getItem'], 'theme')
         if (localTheme) appTheme = localTheme;

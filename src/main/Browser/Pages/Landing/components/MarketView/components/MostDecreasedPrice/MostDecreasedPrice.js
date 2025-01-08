@@ -1,13 +1,15 @@
 import React from 'react';
 import classes from "../../MarketView.module.css";
-import {images} from "../../../../../../../../assets/images";
 import i18n from "i18next";
-import {BN} from "../../../../../../../../utils/utils";
+import {BN, getCurrencyNameOrAlias} from "../../../../../../../../utils/utils";
 import {useTranslation} from "react-i18next";
+import {useSelector} from "react-redux";
 
 const MostDecreasedPrice = ({mostDecreasedPrice}) => {
 
     const {t} = useTranslation();
+    const language = i18n.language
+    const currencies = useSelector((state) => state.exchange.currencies)
 
     return (
         <div className={`column border-bottom  my-3`}>
@@ -16,21 +18,22 @@ const MostDecreasedPrice = ({mostDecreasedPrice}) => {
                 <div className={`row jc-center ai-center`}>
                     <img
                         className="img-md-plus ml-05"
-                        src={images[mostDecreasedPrice.pairInfo.baseAsset]}
+                        src={currencies[mostDecreasedPrice.pairInfo.baseAsset]?.icon}
                         alt={mostDecreasedPrice.pairInfo.baseAsset}
                         title={mostDecreasedPrice.pairInfo.baseAsset}
                     />
-                    <span className={`mr-05`}>{t("currency." + mostDecreasedPrice.pairInfo.baseAsset)}</span>
+                    <span className={`mr-05`}>{getCurrencyNameOrAlias(currencies[mostDecreasedPrice.pairInfo.baseAsset], language)}</span>
                 </div>
                 <div className={`column ai-end`}>
                     <div className={`${i18n.language !== "fa" ? 'row-reverse' : 'row'}`}>
                         <span className={`fs-0-6 ${i18n.language !== "fa" ? 'mr-05' : 'ml-05'}`}>{mostDecreasedPrice.pairInfo.quoteAsset}</span>
-                        <span> {new BN(mostDecreasedPrice?.lastPrice).toFormat()} </span>
+                        <span>{new BN(mostDecreasedPrice?.lastPrice).decimalPlaces(currencies[mostDecreasedPrice.pairInfo.quoteAsset]?.precision ?? 0).toFormat()}</span>
                     </div>
-                    <span className={`${mostDecreasedPrice?.priceChangePercent > 0 ? "text-green" : "text-red"} direction-ltr`}>{new BN(mostDecreasedPrice?.priceChangePercent).toFormat(2)} %</span>
+                    <span className={`${mostDecreasedPrice?.priceChangePercent > 0 ? "text-green" : mostDecreasedPrice?.priceChangePercent < 0 ? "text-red" : ""} direction-ltr`}>{mostDecreasedPrice?.priceChangePercent === 0 ? "0 %" : `${new BN(mostDecreasedPrice?.priceChangePercent).toFormat(2)} %`}</span>
                 </div>
             </div>
         </div>
+
     );
 };
 
