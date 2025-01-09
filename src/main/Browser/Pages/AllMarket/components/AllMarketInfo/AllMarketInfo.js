@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import classes from './AllMarketInfo.module.css'
 import Icon from "../../../../../../components/Icon/Icon";
 import AllMarketInfoCard from "./components/AllMarketInfoCard/AllMarketInfoCard";
@@ -27,12 +27,18 @@ const AllMarketInfo = () => {
     const currencies = useSelector((state) => state.exchange.currencies)
 
     const {data: overview, isLoading, error} = useOverview(null, interval, quote)
-    const {data: quoteCurrencies} = useGetQuoteCurrencies()
+    const {data: quoteCurrencies, isLoading:quoteCurrenciesIsLoading, error:quoteCurrenciesError} = useGetQuoteCurrencies()
+
+    useEffect(() => {
+        if (quoteCurrencies?.length > 0) {
+            setActiveCurrency(quoteCurrencies[0]);
+        }
+    }, [quoteCurrencies]);
 
 
     const content = () => {
-        if (isLoading) return <div style={{height: "40vh"}}><Loading/></div>
-        if (error) return <div style={{height: "40vh"}}><Error/></div>
+        if (isLoading || quoteCurrenciesIsLoading) return <div style={{height: "40vh"}}><Loading/></div>
+        if (error || quoteCurrenciesError) return <div style={{height: "40vh"}}><Error/></div>
         else return <>
             {card ?
                 <AllMarketInfoCard data={overview} activeCurrency={activeCurrency}/>

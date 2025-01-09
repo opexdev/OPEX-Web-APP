@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import classes from './MarketInfo.module.css'
 import Icon from "../../../../../../components/Icon/Icon";
 import MarketInfoTable from "./components/MarketInfoTable/MarketInfoTable";
@@ -18,24 +18,32 @@ const MarketInfo = () => {
     const {t} = useTranslation();
 
     const [card, setCard] = useState(false)
-    const [activeCurrency, setActiveCurrency] = useState("")
+
+    const [activeCurrency, setActiveCurrency] = useState("");
 
     const interval = "24h"
+
+
+
     const quote = activeCurrency === "" ? null : activeCurrency
 
     const currencies = useSelector((state) => state.exchange.currencies)
     const language = i18n.language
 
     const {data: overview, isLoading, error} = useOverview(null, interval, quote)
-    const {data: quoteCurrencies} = useGetQuoteCurrencies()
+    const {data: quoteCurrencies, isLoading:quoteCurrenciesIsLoading, error:quoteCurrenciesError} = useGetQuoteCurrencies()
 
-    console.log("overview", overview)
-    console.log("i18n.language", i18n.language)
+
+    useEffect(() => {
+        if (quoteCurrencies?.length > 0) {
+            setActiveCurrency(quoteCurrencies[0]);
+        }
+    }, [quoteCurrencies]);
 
 
     const content = () => {
-        if (isLoading) return <div style={{height: "40vh"}}><Loading/></div>
-        if (error) return <div style={{height: "40vh"}}><Error/></div>
+        if (isLoading || quoteCurrenciesIsLoading) return <div style={{height: "40vh"}}><Loading/></div>
+        if (error || quoteCurrenciesError) return <div style={{height: "40vh"}}><Error/></div>
         else return <>
             {card ?
                 <MarketInfoCard data={overview.slice(0, 5)} activeCurrency={activeCurrency}/>
