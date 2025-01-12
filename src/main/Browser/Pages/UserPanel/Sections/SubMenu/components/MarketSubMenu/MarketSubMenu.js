@@ -12,8 +12,15 @@ const MarketSubMenu = () => {
     const {t} = useTranslation();
     const [activeTab] = useState(JSON.parse(localStorage.getItem("activeMarketTab")) || 1);
     const symbols = useSelector((state) => state.exchange.symbols)
+
+    console.log("symbols", symbols)
+
+    const pairsList = useSelector((state) => state.exchange.pairsList)
+    console.log("pairsList from redux", pairsList)
+
     const fav = useSelector((state) => state.auth.favoritePairs)
     const dispatch = useDispatch();
+    console.log("fav", fav)
 
     const addToFav = (selected) => {
         if (fav.includes(selected)) {
@@ -31,10 +38,11 @@ const MarketSubMenu = () => {
                 <MarketCard
                     id="0"
                     type="fav"
-                    pairs={symbols.filter(p => fav.includes(p.symbol))}
+                    pairs={Object.values(pairsList).filter(pair => fav.includes(pair.symbol))}
                     favPair={fav}
                     addFav={(selected) => addToFav(selected)}
                 />
+
             ),
         },
         {
@@ -43,7 +51,7 @@ const MarketSubMenu = () => {
                 <MarketCard
                     id="1"
                     type="all"
-                    pairs={symbols}
+                    pairs={pairsList}
                     favPair={fav}
                     addFav={(selected) => addToFav(selected)}
                 />
@@ -57,7 +65,7 @@ const MarketSubMenu = () => {
                     id="2"
                     type="BTC"
                     favPair={fav}
-                    pairs={symbols.filter(p => (p.baseAsset === "BTC" || p.quoteAsset === "BTC"))}
+                    pairs={Object.values(pairsList).filter(pair => pair.baseAsset === "BTC" || pair.quoteAsset === "BTC")}
                     addFav={(selected) => addToFav(selected)}
                 />
             ),
@@ -70,7 +78,7 @@ const MarketSubMenu = () => {
                     id="3"
                     type="USDT"
                     favPair={fav}
-                    pairs={symbols.filter(p => (p.baseAsset === "USDT" || p.quoteAsset === "USDT"))}
+                    pairs={Object.values(pairsList).filter(pair => pair.baseAsset === "USDT" || pair.quoteAsset === "USDT")}
                     addFav={(selected) => addToFav(selected)}
                 />
             ),

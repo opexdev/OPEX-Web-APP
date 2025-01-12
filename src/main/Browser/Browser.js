@@ -36,12 +36,10 @@ const Browser = () => {
     const description = useSelector((state) => state.exchange.description)
 
     const currencies = useSelector((state) => state.exchange.currencies)
-    const pairsList = useSelector((state) => state.exchange.pairsList)
     const fees = useSelector((state) => state.exchange.fees)
-
     console.log("currencies from redux", currencies)
+
     console.log("fees from redux", fees)
-    console.log("pairsList from redux", pairsList)
 
 
     theme === "DARK" ? document.body.classList.add('dark') : document.body.classList.remove('dark');

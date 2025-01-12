@@ -7,7 +7,13 @@ const MarketCard = ({type, ...props}) => {
     return (
         <div style={{height: "100%"}}>
             <ScrollBar>
-                {props.pairs.map((pair) => <MarketPairCard {...props} pair={pair} key={pair.symbol}/>)}
+
+                {
+                    Object.keys(props?.pairs)
+
+                        .map((pair) => <MarketPairCard {...props} pair={props?.pairs[pair]} key={pair.symbol}/>)
+                }
+
             </ScrollBar>
         </div>
     );
