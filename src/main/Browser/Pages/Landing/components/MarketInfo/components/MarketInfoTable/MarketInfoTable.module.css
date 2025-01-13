@@ -11,5 +11,6 @@
 }
 
 .filter {
-    filter: blur(4px);
+    /*filter: invert(51%) sepia(94%) saturate(370%) hue-rotate(109deg) brightness(87%) contrast(92%);*/
+    filter: invert(38%) sepia(77%) saturate(5872%) hue-rotate(347deg) brightness(93%) contrast(79%);
 }

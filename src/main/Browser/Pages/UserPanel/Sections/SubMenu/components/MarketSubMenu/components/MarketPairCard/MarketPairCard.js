@@ -12,12 +12,8 @@ const MarketPairCard = ({id, pair, favPair, addFav}) => {
     const activePair = useSelector((state) => state.exchange.activePair.symbol)
     const {data: prices} = useGetLastPrices()
 
-    console.log("prices", prices)
-    console.log("pair", pair)
-
     const language = i18n.language
     const currencies = useSelector((state) => state.exchange.currencies)
-
 
     const dispatch = useDispatch();
     const changeActivePair = () =>{

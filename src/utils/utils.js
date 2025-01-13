@@ -74,7 +74,6 @@ export const timeValidator = str => {
 
 export const toAbsoluteUrl = (path) => process.env.PUBLIC_URL + path
 
-
 export function getCurrencyNameOrAlias(currency, lang) {
 
     const languagesConfig = { fa: "alias", en: "name", ar: "alias" };
