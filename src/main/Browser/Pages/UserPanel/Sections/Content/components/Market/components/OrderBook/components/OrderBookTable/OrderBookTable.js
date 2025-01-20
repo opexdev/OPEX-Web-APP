@@ -18,6 +18,9 @@ const OrderBookTable = ({data, type}) => {
     const activePair = useSelector((state) => state.exchange.activePair)
     const dispatch = useDispatch();
 
+    const language = i18n.language
+    const currencies = useSelector((state) => state.exchange.currencies)
+
     let header;
 
     let totalAmount = data.reduce((total, asks) => parseFloat(asks[1]) + total, 0);
@@ -71,15 +74,15 @@ const OrderBookTable = ({data, type}) => {
         return `<div class="column jc-between col-100">
       <div class="row jc-between col-100">
         <span class="pl-05">${t("averagePrice")}:</span>
-        <span>${average.pricePerUnit.dividedBy(index + 1).decimalPlaces(activePair.quoteAssetPrecision).toFormat()}</span>
+        <span>${average.pricePerUnit.dividedBy(index + 1).decimalPlaces(currencies[activePair.quoteAsset].precision).toFormat()}</span>
       </div>
       <div class="row jc-between col-100">
         <span class="pl-05">${t("totalVolume",)}:</span>
-        <span>${average.amount.decimalPlaces(activePair.baseAssetPrecision).toFormat()}</span>
+        <span>${average.amount.decimalPlaces(currencies[activePair.baseAsset].precision).toFormat()}</span>
       </div>
       <div class="row jc-between col-100">
         <span class="pl-05">${t("totalPrice")}:</span>
-        <span>${average.total.decimalPlaces(activePair.quoteAssetPrecision).toFormat()}</span>
+        <span>${average.total.decimalPlaces(currencies[activePair.quoteAsset].precision).toFormat()}</span>
       </div>
     </div>`
     }
@@ -114,15 +117,15 @@ const OrderBookTable = ({data, type}) => {
                                     data-tooltip-html={toolTipHandler(avg, index)}
                                     data-amount={avg.amount.toString()}
                                     onClick={(e) => dispatch(setSellOrder({
-                                        pricePerUnit: pricePerUnit.decimalPlaces(activePair.quoteAssetPrecision).toString(),
+                                        pricePerUnit: pricePerUnit.decimalPlaces(currencies[activePair.quoteAsset].precision).toString(),
                                         amount: parseFloat(e.currentTarget.getAttribute("data-amount")),
                                     }))}>
                                     <span
-                                        className="width-30">{pricePerUnit.decimalPlaces(activePair.quoteAssetPrecision).toFormat()}</span>
+                                        className="width-30">{pricePerUnit.decimalPlaces(currencies[activePair.quoteAsset].precision).toFormat()}</span>
                                     <span
-                                        className="width-30">{amount.decimalPlaces(activePair.baseAssetPrecision).toFormat()}</span>
+                                        className="width-30">{amount.decimalPlaces(currencies[activePair.baseAsset].precision).toFormat()}</span>
                                     <span
-                                        className="width-40">{totalPrice.decimalPlaces(activePair.quoteAssetPrecision).toFormat()}</span>
+                                        className="width-40">{totalPrice.decimalPlaces(currencies[activePair.quoteAsset].precision).toFormat()}</span>
                                 </div>
                             ) : (
                                 <div
@@ -138,16 +141,16 @@ const OrderBookTable = ({data, type}) => {
                                     data-amount={avg.amount.toString()}
                                     onClick={(e) =>
                                         dispatch(setBuyOrder({
-                                            pricePerUnit: parseFloat(pricePerUnit.decimalPlaces(activePair.quoteAssetPrecision).toString()),
+                                            pricePerUnit: parseFloat(pricePerUnit.decimalPlaces(currencies[activePair.quoteAsset].precision).toString()),
                                             amount: parseFloat(e.currentTarget.getAttribute("data-amount")),
                                         }))
                                     }>
                                     <span
-                                        className="width-40">{totalPrice.decimalPlaces(activePair.quoteAssetPrecision).toFormat()}</span>
+                                        className="width-40">{totalPrice.decimalPlaces(currencies[activePair.quoteAsset].precision).toFormat()}</span>
                                     <span
-                                        className="width-30">{amount.decimalPlaces(activePair.baseAssetPrecision).toFormat()}</span>
+                                        className="width-30">{amount.decimalPlaces(currencies[activePair.baseAsset].precision).toFormat()}</span>
                                     <span
-                                        className="width-30">{pricePerUnit.decimalPlaces(activePair.quoteAssetPrecision).toFormat()}</span>
+                                        className="width-30">{pricePerUnit.decimalPlaces(currencies[activePair.quoteAsset].precision).toFormat()}</span>
                                 </div>
                             );
                         })}
