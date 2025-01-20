@@ -2,6 +2,9 @@ import * as actionTypes from "./actionTypes";
 import {GET_FEES} from "./actionTypes";
 
 export const setActivePairInitiate = (pair, activeTab) => {
+
+    console.log("pair in excange", pair)
+    console.log("activeTab in excange", activeTab)
     return {
         type: actionTypes.SET_ACTIVE_PAIR_INITIATE,
         activeTab: activeTab,
@@ -10,6 +13,10 @@ export const setActivePairInitiate = (pair, activeTab) => {
 };
 
 export const setActivePair = pair => {
+
+    console.log("pair---------->", pair)
+    console.log("pair---------->", typeof pair)
+
     return {
         type: actionTypes.SET_ACTIVE_PAIR,
         pair: pair,

@@ -16,15 +16,15 @@ const Market = () => {
                 </div>
                 <div className="column col-62 pr-05">
                     <TradingView/>
-                    <OrderBook/>
+                    {/*<OrderBook/>*/}
                 </div>
             </div>
             <div className="row px-1 mb-3">
                 <div className="column col-55 pl-05">
-                    <MyOrders/>
+                    {/*<MyOrders/>*/}
                 </div>
                 <div className="column col-45 pr-05">
-                    <LastTrades/>
+                    {/*<LastTrades/>*/}
                 </div>
             </div>
         </>

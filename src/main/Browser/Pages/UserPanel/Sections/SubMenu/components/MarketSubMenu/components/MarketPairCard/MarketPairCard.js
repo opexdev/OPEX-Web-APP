@@ -15,10 +15,25 @@ const MarketPairCard = ({id, pair, favPair, addFav}) => {
     const language = i18n.language
     const currencies = useSelector((state) => state.exchange.currencies)
 
+    console.log("pair", pair)
+    console.log("activePair in submenu", activePair)
+
     const dispatch = useDispatch();
-    const changeActivePair = () =>{
+    /*const changeActivePair = () =>{
         if (activePair !== pair.symbol) dispatch(setActivePairInitiate(pair, id))
-    }
+    }*/
+
+    const changeActivePair = () => {
+        // ساختن رشته با فرمت BASE_QUOTE
+        const pairSymbolFormatted = `${pair.baseAsset}_${pair.quoteAsset}`;
+
+        // مقایسه activePair با رشته ساخته‌شده
+        if (activePair !== pairSymbolFormatted) {
+            // به‌روزرسانی activePair
+            dispatch(setActivePairInitiate(`${pair.baseAsset}_${pair.quoteAsset}`, id));
+        }
+    };
+
     return (
         <div onClick={changeActivePair}
              className={`width-100 row jc-between ai-center px-1 py-05 cursor-pointer double-striped border-bottom ${classes.container} ${activePair === pair.symbol ? classes.selected : ""} `}>

@@ -131,9 +131,14 @@ export function* loadConfig(action) {
             const decimalPlaces = precisionValue.includes('.')
                 ? precisionValue.split('.')[1].length
                 : 0;
+
+            const decimalFactor = Number((Math.pow(10, -decimalPlaces)).toFixed(decimalPlaces));
+
             acc[currency.symbol] = {
                 ...currency,
                 precision: decimalPlaces,
+                minOrder: decimalFactor,
+                step: decimalFactor,
             };
             return acc;
         }, {});
@@ -197,7 +202,16 @@ export function* loadConfig(action) {
 
         const activePair = yield call([localStorage, 'getItem'], 'activePair')
         const lastActivePair = symbols.find(symbol => symbol.symbol === activePair)
-        yield put(actions.setActivePair(lastActivePair || symbols[0]));
+
+        console.log("symbols[0]", symbols[0])
+        console.log("activePair localStorage", activePair)
+        console.log("lastActivePair", lastActivePair)
+        console.log("exchangeInfo.symbols", exchangeInfo.symbols)
+        console.log("pairsListMap", pairsListMap)
+        console.log("pairsListMap 0", Object.keys(pairsListMap)[0])
+
+
+        yield put(actions.setActivePair(lastActivePair || Object.keys(pairsListMap)[0]));
 
     } catch (e) {
         yield put(actions.setError(true))

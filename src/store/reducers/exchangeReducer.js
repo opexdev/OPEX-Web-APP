@@ -4,7 +4,7 @@ const initialState = {
     assets: [],
     pairs: [],
     symbols: [],
-    activePair: {},
+    activePair: [],
     activePairOrders: {
         bestBuyPrice: 0,
         bestSellPrice: 0,
@@ -33,6 +33,8 @@ const initialState = {
     fees: [],
 };
 
+
+
 const exchangeReducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.SET_IPG:
@@ -45,13 +47,32 @@ const exchangeReducer = (state = initialState, action) => {
                 ...state,
                 verifyEmailLock: action.verifyEmailLockTime,
             };
-        case actionTypes.SET_ACTIVE_PAIR:
+        /*case actionTypes.SET_ACTIVE_PAIR:
             return {
                 ...state,
                 activePair: {
                     ...state.activePair,
                     ...action.pair,
-                    name: action.pair.baseAsset + "/" + action.pair.quoteAsset
+                    // name: action.pair.baseAsset + "/" + action.pair.quoteAsset
+                },
+                activePairOrders: {
+                    ...state.activePairOrders,
+                    bestBuyPrice: 0,
+                    bestSellPrice: 0,
+                    lastTradePrice: 0,
+                },
+            };*/
+
+
+        case actionTypes.SET_ACTIVE_PAIR:
+            const [baseAsset, quoteAsset] = action.pair.split('_');
+            return {
+                ...state,
+                activePair: {
+                    symbol: `${baseAsset}${quoteAsset}`,
+                    pair: action.pair,
+                    baseAsset: baseAsset,
+                    quoteAsset: quoteAsset,
                 },
                 activePairOrders: {
                     ...state.activePairOrders,
@@ -60,6 +81,7 @@ const exchangeReducer = (state = initialState, action) => {
                     lastTradePrice: 0,
                 },
             };
+
         case actionTypes.SET_BEST_BUY_PRICE:
             return {
                 ...state,
