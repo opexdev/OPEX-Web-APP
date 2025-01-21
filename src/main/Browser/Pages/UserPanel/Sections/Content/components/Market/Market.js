@@ -24,7 +24,7 @@ const Market = () => {
                     {/*<MyOrders/>*/}
                 </div>
                 <div className="column col-45 pr-05">
-                    {/*<LastTrades/>*/}
+                    <LastTrades/>
                 </div>
             </div>
         </>

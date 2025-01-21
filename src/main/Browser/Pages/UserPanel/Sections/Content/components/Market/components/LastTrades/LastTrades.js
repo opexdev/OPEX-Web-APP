@@ -27,6 +27,8 @@ const LastTrades = () => {
         </div>
     }
 
+
+
     return (
         <div
             className={`width-100 card-bg card-border column ${classes.container}`}>
