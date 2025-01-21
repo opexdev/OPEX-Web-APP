@@ -12,6 +12,7 @@ import Error from "../../../../../../../../../../../../components/Error/Error";
 import {useMyOpenOrders} from "../../../../../../../../../../../../queries";
 import {cancelOrderByOrderID} from "js-api-client";
 import Date from "../../../../../../../../../../../../components/Date/Date";
+import i18n from "i18next";
 
 
 const OpenOrders = () => {
@@ -19,8 +20,12 @@ const OpenOrders = () => {
     const {t} = useTranslation();
     const [openOrder, setOpenOrder] = useState(null)
 
+    const language = i18n.language
+    const currencies = useSelector((state) => state.exchange.currencies)
     const activePair = useSelector((state) => state.exchange.activePair)
     const lastTransaction = useSelector((state) => state.auth.lastTransaction);
+
+
 
     const {data, isLoading, error, refetch} = useMyOpenOrders(activePair.symbol)
 
@@ -71,9 +76,9 @@ const OpenOrders = () => {
                             <tr className={`${tr.side === "BUY" ? "text-green" : "text-red"}`}>
                                 <td className={`pr-05`}><Date date={tr.time}/></td>
                                 <td>{moment(tr.time).format("HH:mm:ss")}</td>
-                                <td>{origQty.decimalPlaces(activePair.baseAssetPrecision).toFormat()}</td>
-                                <td>{pricePerUnit.decimalPlaces(activePair.quoteAssetPrecision).toFormat()}</td>
-                                <td>{totalPrice.decimalPlaces(activePair.quoteAssetPrecision).toFormat()}</td>
+                                <td>{origQty.decimalPlaces(currencies[activePair.baseAsset].precision).toFormat()}</td>
+                                <td>{pricePerUnit.decimalPlaces(currencies[activePair.quoteAsset].precision).toFormat()}</td>
+                                <td>{totalPrice.decimalPlaces(currencies[activePair.quoteAsset].precision).toFormat()}</td>
                                 <td>{executedQty.dividedBy(origQty).multipliedBy(100).toFormat(0)}</td>
                                 <td
                                     className={`width-5`}
@@ -113,7 +118,7 @@ const OpenOrders = () => {
                                         </p>
                                         <p className="width-47 row jc-between">
                                             {t("myOrders.tradedAmount")} :{" "}
-                                            <span>{executedQty.decimalPlaces(activePair.baseAssetPrecision).toFormat()}</span>
+                                            <span>{executedQty.decimalPlaces(currencies[activePair.baseAsset].precision).toFormat()}</span>
                                         </p>
                                     </div>
                                     <div
@@ -125,7 +130,7 @@ const OpenOrders = () => {
                                         </p>
                                         <p className="width-47 row jc-between">
                                             {t("myOrders.tradedPrice")} :{" "}
-                                            <span>{executedQty.multipliedBy(pricePerUnit).decimalPlaces(activePair.baseAssetPrecision).toFormat()}</span>
+                                            <span>{executedQty.multipliedBy(pricePerUnit).decimalPlaces(currencies[activePair.baseAsset].precision).toFormat()}</span>
                                         </p>
                                     </div>
                                 </td>
