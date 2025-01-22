@@ -32,6 +32,10 @@ export const encodeQueryData = (params) => {
 }
 
 export const BN = BigNumber.clone({
+
+    DECIMAL_PLACES: 8,
+    ROUNDING_MODE: BigNumber.ROUND_DOWN,
+
     FORMAT: {
         groupSize: 3,
         groupSeparator: ',',

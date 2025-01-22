@@ -9,6 +9,8 @@ import Icon from "../../../../../../../../../../../../components/Icon/Icon";
 import {useMyOrderHistory} from "../../../../../../../../../../../../queries";
 import Error from "../../../../../../../../../../../../components/Error/Error";
 import Date from "../../../../../../../../../../../../components/Date/Date";
+import i18n from "i18next";
+import {BN} from "../../../../../../../../../../../../utils/utils";
 
 const OrdersHistory = () => {
     const {t} = useTranslation();
@@ -16,6 +18,9 @@ const OrdersHistory = () => {
 
     const activePair = useSelector((state) => state.exchange.activePair)
     const lastTransaction = useSelector((state) => state.auth.lastTransaction);
+
+    const language = i18n.language
+    const currencies = useSelector((state) => state.exchange.currencies)
 
     const {data, isLoading, error, refetch} = useMyOrderHistory(activePair.symbol)
 
@@ -49,14 +54,23 @@ const OrdersHistory = () => {
                 </thead>
                 <tbody>
                 {data.map((tr, index) => (
+
+                    console.log("tr.origQty", tr.origQty),
+                    console.log("typeof tr.origQty", typeof tr.origQty),
                     <Fragment key={index}>
                         <tr className={tr.side === "BUY" ? "text-green" : "text-red"}>
                             <td className={`pr-05`}><Date date={tr.time}/></td>
                             <td>{moment(tr.time).format("HH:mm:ss")}</td>
-                            <td>{tr.origQty}</td>
-                            <td>{tr.price.toLocaleString()}</td>
-                            <td>{(tr.origQty * tr.price).toLocaleString()}</td>
+
+
+                            <td>{new BN(tr.origQty).decimalPlaces(currencies[activePair.baseAsset].precision).toFormat()}</td>
+
+                            <td>{new BN(tr.price).decimalPlaces(currencies[activePair.quoteAsset].precision).toFormat()}</td>
+
+                            <td>{new BN(tr.origQty).multipliedBy(tr.price).decimalPlaces(currencies[activePair.quoteAsset].precision).toFormat()}</td>
+
                             <td>{t("orderStatus." + tr.status)}</td>
+
                             {openOrder === index ? (
                                 <td className={`width-7`} onClick={() => setOpenOrder(null)}>
                                     <Icon
