@@ -11,6 +11,8 @@ import {useGetCurrencyInfo} from "../../queries";
 import Loading from "../Loading/Loading";
 import Error from "../Error/Error";
 import PopupAddress from "./PopupAddress/PopupAddress";
+import i18n from "i18next";
+import {getCurrencyNameOrAlias} from "../../utils/utils";
 
 const Popup = ({currency, closePopup}) => {
 
@@ -18,6 +20,8 @@ const Popup = ({currency, closePopup}) => {
 
     const isLogin = useSelector((state) => state.auth.isLogin)
 
+    const language = i18n.language
+    const currencies = useSelector((state) => state.exchange.currencies)
 
     const [networkName, setNetworkName] = useState({value: 0, error: []});
 
@@ -75,7 +79,7 @@ const Popup = ({currency, closePopup}) => {
     return (
         <div className={`width-100 column jc-between ai-center px-1 py-1 appear-animation card-border ${classes.container}`}>
             <div className={`${classes.header} width-100`}>
-                <h3>{t("deposit")} <span>{t("currency." + currency)}</span></h3>
+                <h3>{t("deposit")} <span>{getCurrencyNameOrAlias(currencies[currency], language)}</span></h3>
             </div>
             <div className={`${classes.content} width-100 column jc-center ai-center`}>
                 {content()}

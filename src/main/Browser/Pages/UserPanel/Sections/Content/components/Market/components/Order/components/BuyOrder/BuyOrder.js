@@ -24,12 +24,6 @@ const BuyOrder = () => {
     const bestBuyPrice = useSelector((state) => state.exchange.activePairOrders.bestBuyPrice)
     const selectedBuyOrder = useSelector((state) => state.exchange.activePairOrders.selectedBuyOrder)
 
-
-    console.log("activePair", activePair)
-    console.log("bestBuyPrice", bestBuyPrice)
-    console.log("selectedBuyOrder", selectedBuyOrder)
-    console.log("activePair", typeof activePair)
-
     const language = i18n.language
     const currencies = useSelector((state) => state.exchange.currencies)
 
