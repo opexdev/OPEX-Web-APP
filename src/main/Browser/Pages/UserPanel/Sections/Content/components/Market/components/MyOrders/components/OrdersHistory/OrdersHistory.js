@@ -54,9 +54,6 @@ const OrdersHistory = () => {
                 </thead>
                 <tbody>
                 {data.map((tr, index) => (
-
-                    console.log("tr.origQty", tr.origQty),
-                    console.log("typeof tr.origQty", typeof tr.origQty),
                     <Fragment key={index}>
                         <tr className={tr.side === "BUY" ? "text-green" : "text-red"}>
                             <td className={`pr-05`}><Date date={tr.time}/></td>

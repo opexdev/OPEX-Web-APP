@@ -9,7 +9,8 @@ import Icon from "../../../../../../../../../../../../components/Icon/Icon";
 import Error from "../../../../../../../../../../../../components/Error/Error";
 import {useMyTrades} from "../../../../../../../../../../../../queries";
 import Date from "../../../../../../../../../../../../components/Date/Date";
-import {BN} from "../../../../../../../../../../../../utils/utils";
+import {BN, getCurrencyNameOrAlias} from "../../../../../../../../../../../../utils/utils";
+import i18n from "i18next";
 
 const Trades = () => {
 
@@ -19,6 +20,9 @@ const Trades = () => {
 
     const activePair = useSelector((state) => state.exchange.activePair)
     const lastTransaction = useSelector((state) => state.auth.lastTransaction);
+
+    const language = i18n.language
+    const currencies = useSelector((state) => state.exchange.currencies)
 
     const {data, isLoading, error, refetch} = useMyTrades(activePair.symbol)
 
@@ -58,9 +62,10 @@ const Trades = () => {
                         <tr className={tr.isBuyer === false ? "text-green" : "text-red"}>
                             <td className={`pr-05`}><Date date={tr.time}/></td>
                             <td>{moment(tr.time).format("HH:mm:ss")}</td>
-                            <td>{tr.qty}</td>
-                            <td>{tr.price.toLocaleString()}</td>
-                            <td>{(tr.qty * tr.price).toLocaleString()}</td>
+                            <td>{new BN(tr.qty).decimalPlaces(currencies[activePair.baseAsset].precision).toFormat()}</td>
+                            <td>{new BN(tr.price).decimalPlaces(currencies[activePair.quoteAsset].precision).toFormat()}</td>
+                            <td>{new BN(tr.qty).multipliedBy(tr.price).decimalPlaces(currencies[activePair.quoteAsset].precision).toFormat()}</td>
+
                             {openOrder === index ? (
                                 <td className={`width-7`} onClick={() => setOpenOrder(null)}>
                                     <Icon
@@ -81,13 +86,14 @@ const Trades = () => {
                             style={{display: openOrder === index ? "revert" : "none"}}>
                             <td colSpan="6" className={`pb-1 px-1 fs-0-8`}>
                                 <div
-                                    className="row jc-between  ai-center"
+                                    className="row jc-between ai-center"
                                     style={{width: "100%"}}>
                                     <p className="width-47 row jc-between">
                                         {t("myOrders.orderId")} : <span>{tr.orderId}</span>
                                     </p>
                                     <p className="width-47 row jc-between">
-                                        {t("commission")} : <span>{new BN(tr.commission).toFormat()} <span>{t("currency." + tr.commissionAsset.toUpperCase())}</span></span>
+                                        {t("commission")} : <span>{new BN(tr.commission).decimalPlaces(currencies[tr.commissionAsset.toUpperCase()].precision).toFormat()}
+                                        <span className={`mr-05`}>{getCurrencyNameOrAlias(currencies[tr.commissionAsset.toUpperCase()], language)}</span></span>
                                     </p>
                                 </div>
                             </td>
