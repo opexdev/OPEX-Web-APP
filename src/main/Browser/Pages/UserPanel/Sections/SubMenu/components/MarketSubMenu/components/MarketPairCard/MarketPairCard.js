@@ -24,12 +24,8 @@ const MarketPairCard = ({id, pair, favPair, addFav}) => {
     }*/
 
     const changeActivePair = () => {
-        // ساختن رشته با فرمت BASE_QUOTE
         const pairSymbolFormatted = `${pair.baseAsset}_${pair.quoteAsset}`;
-
-        // مقایسه activePair با رشته ساخته‌شده
         if (activePair !== pairSymbolFormatted) {
-            // به‌روزرسانی activePair
             dispatch(setActivePairInitiate(`${pair.baseAsset}_${pair.quoteAsset}`, id));
         }
     };

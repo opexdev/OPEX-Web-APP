@@ -21,7 +21,9 @@ export function* setThemeSaga(action) {
 }
 
 export function* setActivePair(action) {
-    yield call([localStorage, 'setItem'], "activePair", action.pair.symbol)
+
+    console.log("action.pair.symbol ------------------------------------>", action.pair)
+    yield call([localStorage, 'setItem'], "activePair", action.pair)
     yield call([localStorage, 'setItem'], "activeMarketTab", action.activeTab)
     yield put(actions.setActivePair(action.pair));
 }
@@ -201,11 +203,17 @@ export function* loadConfig(action) {
         yield put(actions.setUserAccountInfo({wallets, tradeFee}));
 
         const activePair = yield call([localStorage, 'getItem'], 'activePair')
-        const lastActivePair = symbols.find(symbol => symbol.symbol === activePair)
+        const lastActivePair = Object.keys(pairsListMap).includes(activePair) ? activePair : null;
+
+        /*const lastActivePair = lastActivePairKey ? pairsListMap[lastActivePairKey] : null;*/
+
+
+
+        /*const lastActivePair = symbols.find(symbol => symbol.symbol === activePair)*/
 
         console.log("symbols[0]", symbols[0])
         console.log("activePair localStorage", activePair)
-        console.log("lastActivePair", lastActivePair)
+        console.log("lastActivePair -------------------------------------------------------- >>>>>>>>>>", lastActivePair)
         console.log("exchangeInfo.symbols", exchangeInfo.symbols)
         console.log("pairsListMap", pairsListMap)
         console.log("pairsListMap 0", Object.keys(pairsListMap)[0])
