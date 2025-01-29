@@ -13,11 +13,15 @@ import i18n from "i18next";
 import ToggleSwitch from "../../../../../../../../../../components/ToggleSwitch/ToggleSwitch";
 import Button from "../../../../../../../../../../components/Button/Button";
 import WithdrawHistoryTable from "../WithdrawHistoryTable/WithdrawHistoryTable";
+import {getCurrencyNameOrAlias} from "../../../../../../../../../../utils/utils";
 
 const WithdrawHistory = () => {
 
     const {t} = useTranslation();
     const coins = useSelector((state) => state.exchange.assets)
+
+    const language = i18n.language
+    const currencies = useSelector((state) => state.exchange.currencies)
 
     const [query, setQuery] = useState({
         "currency": null, // optional
@@ -53,9 +57,11 @@ const WithdrawHistory = () => {
         categoryOptions.push({value: o, label: t('TransactionCategory.' + o)})
     })
 
-    coins.forEach((o) => {
-        currenciesOptions.push({value: o, label: t('currency.' + o)})
+
+    Object.keys(currencies).forEach((o) => {
+        currenciesOptions.push({value: o, label: getCurrencyNameOrAlias(currencies[o], language)})
     })
+
 
 
     const scrollRef = useRef(null);
@@ -137,7 +143,7 @@ const WithdrawHistory = () => {
                     type="select"
                     value={{
                         value: query?.currency,
-                        label:  query?.currency ? t('currency.'+ query?.currency) : t('all'),
+                        label:  query?.currency ? getCurrencyNameOrAlias(currencies[query?.currency], language) : t('all'),
                     }}
                     onchange={(e) => setQuery({...query, currency: e.value, offset:0})}
                     customClass={`width-20 ${classes.thisInput}`}

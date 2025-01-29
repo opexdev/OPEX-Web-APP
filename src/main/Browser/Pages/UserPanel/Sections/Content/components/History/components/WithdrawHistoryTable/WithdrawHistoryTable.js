@@ -3,14 +3,21 @@ import classes from './WithdrawHistoryTable.module.css'
 import {useTranslation} from "react-i18next";
 import Date from "../../../../../../../../../../components/Date/Date";
 import moment from "moment-jalaali";
-import {BN} from "../../../../../../../../../../utils/utils";
+import {BN, getCurrencyNameOrAlias} from "../../../../../../../../../../utils/utils";
 import Icon from "../../../../../../../../../../components/Icon/Icon";
+import i18n from "i18next";
+import {useSelector} from "react-redux";
 
 const WithdrawHistoryTable = ({txs, offset}) => {
 
+    const {t} = useTranslation();
+    const language = i18n.language
+    const currencies = useSelector((state) => state.exchange.currencies)
+
+
     const [isOpen, setIsOpen] = useState(false);
 
-    const {t} = useTranslation();
+
 
     let head = (
         <div className="row text-gray px-2 py-2" style={{backgroundColor:"var(--tableHeader)"}}>
@@ -41,7 +48,7 @@ const WithdrawHistoryTable = ({txs, offset}) => {
                             </span>
 
                             <span className="width-10 row jc-start ai-center">
-                                {t("currency." + tr.currency )}
+                                {getCurrencyNameOrAlias(currencies[tr.currency], language)}
                             </span>
 
                             <span className="width-10 row jc-start ai-center">
@@ -49,11 +56,11 @@ const WithdrawHistoryTable = ({txs, offset}) => {
                             </span>
 
                             <span className="width-9 row jc-start ai-center text-red">
-                                {new BN(tr?.amount).toFormat()}
+                                {new BN(tr?.amount).decimalPlaces(currencies[tr.currency].precision).toFormat()}
                             </span>
 
                             <span className="width-9 row jc-start ai-center">
-                                {new BN(tr?.appliedFee).toFormat()}
+                                {new BN(tr?.appliedFee).decimalPlaces(currencies[tr.currency].precision).toFormat()}
                             </span>
 
                             <span className="width-9 row jc-start ai-center">
