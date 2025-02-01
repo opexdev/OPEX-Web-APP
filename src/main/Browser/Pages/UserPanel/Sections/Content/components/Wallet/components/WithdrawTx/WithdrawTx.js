@@ -10,11 +10,17 @@ import WithdrawTxTable from "../WithdrawTxTable/WithdrawTxTable";
 import * as Routes from "../../../../../../../../Routes/routes";
 import Icon from "../../../../../../../../../../components/Icon/Icon";
 import i18n from "i18next";
+import {useSelector} from "react-redux";
+import {getCurrencyNameOrAlias} from "../../../../../../../../../../utils/utils";
 
 const WithdrawTx = () => {
 
     const {id} = useParams();
     const {t} = useTranslation();
+
+    const language = i18n.language
+    const currencies = useSelector((state) => state.exchange.currencies)
+
 
     const query = {
         "currency": id, // optional
@@ -44,7 +50,7 @@ const WithdrawTx = () => {
                     <Trans
                         i18nKey="WithdrawTx.title"
                         values={{
-                            currency: t("currency." + id),
+                            currency: getCurrencyNameOrAlias(currencies[id], language),
                         }}
                     />
                 </h4>

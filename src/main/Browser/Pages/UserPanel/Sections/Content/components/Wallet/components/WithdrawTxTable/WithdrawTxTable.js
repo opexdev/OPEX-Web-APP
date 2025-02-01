@@ -11,10 +11,16 @@ import {cancelWithdrawReq} from "js-api-client/client/withdraw";
 import toast from "react-hot-toast";
 import {useGetWithdrawHistory} from "../../../../../../../../../../queries";
 import {useParams} from "react-router-dom";
+import i18n from "i18next";
+import {useSelector} from "react-redux";
 
 const WithdrawTxTable = ({txs}) => {
 
     const {t} = useTranslation();
+
+    const language = i18n.language
+    const currencies = useSelector((state) => state.exchange.currencies)
+
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -88,10 +94,8 @@ const WithdrawTxTable = ({txs}) => {
                                 {tr.destNetwork ?? "- - -"}
                             </span>
 
-
-
                             <span className="width-23 row jc-start ai-center text-red">
-                                {new BN(tr?.amount).toFormat()}
+                                {new BN(tr?.amount).decimalPlaces(currencies[tr.currency].precision).toFormat()}
                             </span>
 
                             <span className="width-18 row jc-start ai-center">
@@ -107,7 +111,7 @@ const WithdrawTxTable = ({txs}) => {
                             <div className={`row width-100 my-05`}>
                                 <span className={`width-40`}>{t("history.fee")}</span>
                                 <span className={`width-60 text-end`}>
-                                    {new BN(tr?.appliedFee).toFormat()}
+                                    {new BN(tr?.appliedFee).decimalPlaces(currencies[tr.currency].precision).toFormat()}
                                 </span>
                             </div>
                             <div className={`row width-100 my-05`}>
