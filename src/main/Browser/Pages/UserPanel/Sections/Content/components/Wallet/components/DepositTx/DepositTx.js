@@ -9,11 +9,16 @@ import DepositTxTable from "../DepositTxTable/DepositTxTable";
 import * as Routes from "../../../../../../../../Routes/routes";
 import Icon from "../../../../../../../../../../components/Icon/Icon";
 import i18n from "i18next";
+import {useSelector} from "react-redux";
+import {getCurrencyNameOrAlias} from "../../../../../../../../../../utils/utils";
 
 const DepositTx = () => {
 
     const {id} = useParams();
     const {t} = useTranslation();
+
+    const language = i18n.language
+    const currencies = useSelector((state) => state.exchange.currencies)
 
     const query = {
         "currency": id, // optional
@@ -44,7 +49,7 @@ const DepositTx = () => {
                     <Trans
                         i18nKey="DepositTx.title"
                         values={{
-                            currency: t("currency." + id),
+                            currency: getCurrencyNameOrAlias(currencies[id], language),
                         }}
                     />
                 </h4>

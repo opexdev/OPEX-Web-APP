@@ -5,10 +5,15 @@ import Date from "../../../../../../../../../../components/Date/Date";
 import moment from "moment-jalaali";
 import {BN} from "../../../../../../../../../../utils/utils";
 import Icon from "../../../../../../../../../../components/Icon/Icon";
+import {useSelector} from "react-redux";
+import i18n from "i18next";
 
 const DepositTxTable = ({txs}) => {
 
     const {t} = useTranslation();
+
+    const language = i18n.language
+    const currencies = useSelector((state) => state.exchange.currencies)
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -42,7 +47,7 @@ const DepositTxTable = ({txs}) => {
                             </span>
 
                             <span className="width-23 row jc-start ai-center text-green">
-                                {new BN(tr?.amount).toFormat()}
+                                {new BN(tr?.amount).decimalPlaces(currencies[tr.currency].precision).toFormat()}
                             </span>
 
                             <span className="width-18 row jc-start ai-center">
